@@ -17,6 +17,7 @@ import {
     Icon,
     Text,
     Toast,
+    View,
 } from 'native-base';
 import { CommonHeader } from '../../../components/CommonHeader';
 import styles from './styles';
@@ -43,13 +44,8 @@ class ItemScreen extends Component {
     }
 
     componentDidMount() {
-        async function getToken() {
-            const token = await AsyncStorage.getItem("token")
-            this.setState({
-                token: token
-            })
-        }
 
+        this.getToken();
         if (this.state.id) {
             this.props.findById(this.state.id);
             this.props.findImageById(this.state.id)
@@ -58,6 +54,17 @@ class ItemScreen extends Component {
         this.setState({ error: null })
 
 
+    }
+
+    async getToken() {
+        await AsyncStorage.getItem("token", (errs, result) => {
+            if (!errs) {
+                if (result !== null) {
+
+                    this.setState({ token: result });
+                }
+            }
+        });
     }
 
 
@@ -104,7 +111,7 @@ class ItemScreen extends Component {
 
     render() {
         const { navigation, loading, addError, editError } = this.props;
-        const { id, name, error, imageURL } = this.state;
+        const { id, name, error, imageURL, token } = this.state;
         const errorData = error?.data
         return (
             <Container>
@@ -114,16 +121,15 @@ class ItemScreen extends Component {
                     <Form>
                         {
                             id &&
-                            <Content>
-                                <Image source={imageURL == '' ? require('../../../../assets/images/no-image.jpg') : { uri: imageURL, headers: { 'Authorization': 'Bearer ' + this.state.token } }} style={{ height: 200 }} />
-                                <Item floatingLabel>
+                            <View>
+
+                                <Image source={imageURL == '' ? require('../../../../assets/images/no-image.jpg') : { uri: imageURL, headers: { 'Authorization': 'Bearer ' + token } }} style={{ height: 200, marginBottom: 20 }} />
+
+                                <Item floatingLabel last>
                                     <Label>ID</Label>
-                                    <Input style={styles.input} disabled value={id.toString()} />
+                                    <Input style={{paddingLeft: 20}} disabled value={id.toString()} />
                                 </Item>
-
-                            </Content>
-
-
+                            </View>
                         }
 
 

@@ -55,7 +55,7 @@ function SummaryTransactions({ transaction }) {
                 </Body>
                 <Right>
                     <Text style={{fontFamily: 'ProductSans-Medium' }}>Jumlah: {transaction.jumlah}</Text>
-                    </Right>
+                </Right>
             </CardItem>
 
         </Card>
@@ -187,6 +187,7 @@ class TransactionsScreen extends Component {
         const { data, search, SegmentHandler } = this.state;
         return (
             <Container>
+                
                 <CommonHeader navigation={navigation} title="Transactions" add={this.onAdd} />
                 <Segment style={{ backgroundColor: "#4cb54c", paddingBottom: 25, height: 20 }}>
                     <Button first onPress={this.onSegmentHandler} active={!SegmentHandler ? true : false}>
